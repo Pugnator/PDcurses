@@ -293,6 +293,9 @@ int mvwin(WINDOW *win, int y, int x)
 
 WINDOW *subwin(WINDOW *orig, int nlines, int ncols, int begy, int begx)
 {
+    if (!orig) /* Check for null pointer */
+	return (WINDOW *)NULL;
+
     WINDOW *win;
     int i;
     int j = begy - orig->_begy;
@@ -303,7 +306,7 @@ WINDOW *subwin(WINDOW *orig, int nlines, int ncols, int begy, int begx)
 
     /* make sure window fits inside the original one */
 
-    if (!orig || (begy < orig->_begy) || (begx < orig->_begx) ||
+    if ((begy < orig->_begy) || (begx < orig->_begx) ||
         (begy + nlines) > (orig->_begy + orig->_maxy) ||
         (begx + ncols) > (orig->_begx + orig->_maxx))
         return (WINDOW *)NULL;
@@ -370,12 +373,12 @@ int mvderwin(WINDOW *win, int pary, int parx)
 
 WINDOW *dupwin(WINDOW *win)
 {
+    if (!win)  /* Check for null pointer first */
+        return (WINDOW *)NULL;
+
     WINDOW *new;
     chtype *ptr, *ptr1;
-    int nlines, ncols, begy, begx, i;
-
-    if (!win)
-        return (WINDOW *)NULL;
+    int nlines, ncols, begy, begx, i;   
 
     nlines = win->_maxy;
     ncols = win->_maxx;
@@ -417,7 +420,7 @@ WINDOW *dupwin(WINDOW *win)
     new->_pary = win->_pary;
     new->_parent = win->_parent;
     new->_bkgd = win->_bkgd;
-    new->_flags = win->_flags;
+    //new->_flags = win->_flags; /* Duplicated value */
 
     return new;
 }

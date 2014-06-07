@@ -121,7 +121,7 @@ int start_color(void)
 
     PDC_init_atrtab();
 
-    memset(pair_set, 0, PDC_COLOR_PAIRS);
+    memset(pair_set, 0, sizeof *pair_set * PDC_COLOR_PAIRS); /* In case of bool is larger than 1 byte */
 
     return OK;
 }
